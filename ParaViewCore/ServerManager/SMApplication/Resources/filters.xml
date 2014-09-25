@@ -1,0 +1,672 @@
+<ServerManagerConfiguration><ProxyGroup name="filters"><SourceProxy class="vtkPVArrayCalculator" name="Calculator">
+      <Documentation long_help="Compute new attribute arrays as function of existing arrays." short_help="Compute new attribute arrays.">The Calculator
+                     filter computes a new data array or new point coordinates
+                     as a function of existing scalar or vector arrays. If
+                     point-centered arrays are used in the computation of a new
+                     data array, the resulting array will also be
+                     point-centered. Similarly, computations using
+                     cell-centered arrays will produce a new cell-centered
+                     array. If the function is computing point coordinates, the
+                     result of the function must be a three-component vector.
+                     The Calculator interface operates similarly to a
+                     scientific calculator. In creating the function to
+                     evaluate, the standard order of operations applies. Each
+                     of the calculator functions is described below. Unless
+                     otherwise noted, enclose the operand in parentheses using
+                     the ( and ) buttons. Clear: Erase the current function
+                     (displayed in the read-only text box above the calculator
+                     buttons). /: Divide one scalar by another. The operands
+                     for this function are not required to be enclosed in
+                     parentheses. *: Multiply two scalars, or multiply a vector
+                     by a scalar (scalar multiple). The operands for this
+                     function are not required to be enclosed in parentheses.
+                     -: Negate a scalar or vector (unary minus), or subtract
+                     one scalar or vector from another. The operands for this
+                     function are not required to be enclosed in parentheses.
+                     +: Add two scalars or two vectors. The operands for this
+                     function are not required to be enclosed in parentheses.
+                     sin: Compute the sine of a scalar. cos: Compute the cosine
+                     of a scalar. tan: Compute the tangent of a scalar. asin:
+                     Compute the arcsine of a scalar. acos: Compute the
+                     arccosine of a scalar. atan: Compute the arctangent of a
+                     scalar. sinh: Compute the hyperbolic sine of a scalar.
+                     cosh: Compute the hyperbolic cosine of a scalar. tanh:
+                     Compute the hyperbolic tangent of a scalar. min: Compute
+                     minimum of two scalars. max: Compute maximum of two
+                     scalars. x^y: Raise one scalar to the power of another
+                     scalar. The operands for this function are not required to
+                     be enclosed in parentheses. sqrt: Compute the square root
+                     of a scalar. e^x: Raise e to the power of a scalar. log:
+                     Compute the logarithm of a scalar (deprecated. same as
+                     log10). log10: Compute the logarithm of a scalar to the
+                     base 10. ln: Compute the logarithm of a scalar to the base
+                     'e'. ceil: Compute the ceiling of a scalar. floor: Compute
+                     the floor of a scalar. abs: Compute the absolute value of
+                     a scalar. v1.v2: Compute the dot product of two vectors.
+                     The operands for this function are not required to be
+                     enclosed in parentheses. cross: Compute cross product of
+                     two vectors. mag: Compute the magnitude of a vector. norm:
+                     Normalize a vector. The operands are described below. The
+                     digits 0 - 9 and the decimal point are used to enter
+                     constant scalar values. iHat, jHat, and kHat are vector
+                     constants representing unit vectors in the X, Y, and Z
+                     directions, respectively. The scalars menu lists the names
+                     of the scalar arrays and the components of the vector
+                     arrays of either the point-centered or cell-centered data.
+                     The vectors menu lists the names of the point-centered or
+                     cell-centered vector arrays. The function will be computed
+                     for each point (or cell) using the scalar or vector value
+                     of the array at that point (or cell). The filter operates
+                     on any type of data set, but the input data set must have
+                     at least one scalar or vector array. The arrays can be
+                     either point-centered or cell-centered. The Calculator
+                     filter's output is of the same data set type as the
+                     input.</Documentation>
+      <InputProperty command="SetInputConnection" name="Input">
+        <ProxyGroupDomain name="groups">
+          <Group name="sources" />
+          <Group name="filters" />
+        </ProxyGroupDomain>
+        <DataTypeDomain name="input_type">
+          <DataType value="vtkDataSet" />
+        </DataTypeDomain>
+        <InputArrayDomain name="input_array" optional="1" />
+        <Documentation>This property specifies the input dataset to the
+        Calculator filter. The scalar and vector variables may be chosen from
+        this dataset's arrays.</Documentation>
+      </InputProperty>
+      <IntVectorProperty command="SetAttributeMode" default_values="1" name="AttributeMode" number_of_elements="1">
+        <EnumerationDomain name="enum">
+          <Entry text="Point Data" value="1" />
+          <Entry text="Cell Data" value="2" />
+        </EnumerationDomain>
+        <Documentation>This property determines whether the computation is to
+        be performed on point-centered or cell-centered data.</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetCoordinateResults" default_values="0" name="CoordinateResults" number_of_elements="1" panel_visibility="advanced">
+        <BooleanDomain name="bool" />
+        <Documentation>The value of this property determines whether the
+        results of this computation should be used as point coordinates or as a
+        new array.</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetResultNormals" default_values="0" name="ResultNormals" number_of_elements="1" panel_visibility="advanced">
+        <BooleanDomain name="bool" />
+        <Documentation>Set whether to output results as point/cell
+        normals. Outputing as normals is only valid with vector
+        results. Point or cell normals are selected using
+        AttributeMode.</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetResultTCoords" default_values="0" name="ResultTCoords" number_of_elements="1" panel_visibility="advanced">
+        <BooleanDomain name="bool" />
+        <Documentation>Set whether to output results as point/cell
+        texture coordinates.  Point or cell texture coordinates are
+        selected using AttributeMode. 2-component texture coordinates
+        cannot be generated at this time.</Documentation>
+      </IntVectorProperty>
+      <StringVectorProperty command="SetResultArrayName" default_values="Result" name="ResultArrayName" number_of_elements="1">
+        <Documentation>This property contains the name for the output array
+        containing the result of this computation.</Documentation>
+      </StringVectorProperty>
+      <StringVectorProperty command="SetFunction" name="Function" number_of_elements="1" panel_widget="calculator">
+        <Documentation>This property contains the equation for computing the
+        new array.</Documentation>
+      </StringVectorProperty>
+      <IntVectorProperty command="SetReplaceInvalidValues" default_values="1" label="Replace Invalid Results" name="ReplaceInvalidValues" number_of_elements="1" panel_visibility="advanced">
+        <BooleanDomain name="bool" />
+        <Documentation>This property determines whether invalid values in the
+        computation will be replaced with a specific value. (See the
+        ReplacementValue property.)</Documentation>
+      </IntVectorProperty>
+      <DoubleVectorProperty command="SetReplacementValue" default_values="0.0" name="ReplacementValue" number_of_elements="1" panel_visibility="advanced">
+        <DoubleRangeDomain name="range" />
+        <Documentation>If invalid values in the computation are to be replaced
+        with another value, this property contains that value.</Documentation>
+      </DoubleVectorProperty>
+      
+    </SourceProxy>
+    
+    <SourceProxy class="vtkPVMetaSliceDataSet" label="Slice" name="Cut">
+      <Documentation long_help="This filter slices a data set with a plane. Slicing is similar to a contour. It creates surfaces from volumes and lines from surfaces." short_help="Slice datasets with planes.">This filter
+                     extracts the portion of the input dataset that lies along
+                     the specified plane. The Slice filter takes any type of
+                     dataset as input. The output of this filter is polygonal
+                     data.</Documentation>
+      <InputProperty command="SetInputConnection" name="Input">
+        <ProxyGroupDomain name="groups">
+          <Group name="sources" />
+          <Group name="filters" />
+        </ProxyGroupDomain>
+        <DataTypeDomain name="input_type">
+          <DataType value="vtkDataSet" />
+        </DataTypeDomain>
+        <Documentation>This property specifies the input to the Slice
+        filter.</Documentation>
+      </InputProperty>
+      <ProxyProperty command="SetCutFunction" label="Slice Type" name="CutFunction">
+        <ProxyGroupDomain name="groups">
+          <Group name="implicit_functions" />
+        </ProxyGroupDomain>
+        <ProxyListDomain name="proxy_list">
+          <Proxy group="implicit_functions" name="Plane" />
+          <Proxy group="implicit_functions" name="Box" />
+          <Proxy group="implicit_functions" name="Sphere" />
+        </ProxyListDomain>
+        <Documentation>This property sets the parameters of the slice
+        function.</Documentation>
+      </ProxyProperty>
+      <DoubleVectorProperty information_only="1" name="InputBounds">
+        <BoundsDomain name="bounds">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+          </RequiredProperties>
+        </BoundsDomain>
+      </DoubleVectorProperty>
+      <IntVectorProperty command="PreserveInputCells" default_values="0" label="Crinkle slice" name="PreserveInputCells" number_of_elements="1">
+        <BooleanDomain name="bool" />
+        <Documentation>This parameter controls whether to extract the entire
+        cells that are sliced by the region or just extract a triangulated
+        surface of that region.</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetGenerateTriangles" default_values="1" name="Triangulate the slice" number_of_elements="1">
+        <BooleanDomain name="bool" />
+        <Documentation>This parameter controls whether to produce triangles in the output.</Documentation>
+      </IntVectorProperty>
+      <DoubleVectorProperty animateable="1" command="SetValue" label="Slice Offset Values" name="ContourValues" number_of_elements_per_command="1" panel_visibility="advanced" repeat_command="1" set_number_command="SetNumberOfContours" use_index="1">
+        <BoundsDomain mode="magnitude" name="bounds">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+          </RequiredProperties>
+        </BoundsDomain>
+        <Documentation>The values in this property specify a list of current
+        offset values. This can be used to create multiple slices with
+        different centers. Each entry represents a new slice with its center
+        shifted by the offset value.</Documentation>
+      </DoubleVectorProperty>
+      <Hints>
+        <Visibility replace_input="2" />
+      </Hints>
+      
+    </SourceProxy>
+    
+    <SourceProxy class="vtkPVMetaClipDataSet" name="Clip">
+      <Documentation long_help="Clip with an implicit plane. Clipping does not reduce the dimensionality of the data set. The output data type of this filter is always an unstructured grid." short_help="Clip with an implicit plane.">The Clip filter
+                     cuts away a portion of the input data set using an
+                     implicit plane. This filter operates on all types of data
+                     sets, and it returns unstructured grid data on
+                     output.</Documentation>
+      <InputProperty command="SetInputConnection" name="Input">
+        <ProxyGroupDomain name="groups">
+          <Group name="sources" />
+          <Group name="filters" />
+        </ProxyGroupDomain>
+        <DataTypeDomain name="input_type">
+          <DataType value="vtkDataSet" />
+        </DataTypeDomain>
+        <InputArrayDomain name="input_array" number_of_components="1" optional="1" />
+        <Documentation>This property specifies the dataset on which the Clip
+        filter will operate.</Documentation>
+      </InputProperty>
+      <ProxyProperty command="SetClipFunction" label="Clip Type" name="ClipFunction">
+        <ProxyGroupDomain name="groups">
+          <Group name="implicit_functions" />
+        </ProxyGroupDomain>
+        <ProxyListDomain name="proxy_list">
+          <Proxy group="implicit_functions" name="Plane" />
+          <Proxy group="implicit_functions" name="Box" />
+          <Proxy group="implicit_functions" name="Sphere" />
+          <Proxy group="implicit_functions" name="Scalar" />
+        </ProxyListDomain>
+        <Documentation>This property specifies the parameters of the clip
+        function (an implicit plane) used to clip the dataset.</Documentation>
+      </ProxyProperty>
+      <DoubleVectorProperty information_only="1" name="InputBounds">
+        <BoundsDomain name="bounds">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+          </RequiredProperties>
+        </BoundsDomain>
+      </DoubleVectorProperty>
+      <StringVectorProperty animateable="0" command="SetInputArrayToProcess" element_types="0 0 0 0 2" label="Scalars" name="SelectInputScalars" number_of_elements="5">
+        <ArrayListDomain attribute_type="Scalars" name="array_list">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+          </RequiredProperties>
+        </ArrayListDomain>
+        <FieldDataDomain name="field_list">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+          </RequiredProperties>
+        </FieldDataDomain>
+        <Documentation>If clipping with scalars, this property specifies the
+        name of the scalar array on which to perform the clip
+        operation.</Documentation>
+        <Hints>
+          <PropertyWidgetDecorator mode="visibility" property="ClipFunction" type="GenericDecorator" value="Scalar" />
+        </Hints>
+      </StringVectorProperty>
+      <DoubleVectorProperty command="SetValue" default_values="0.0" name="Value" number_of_elements="1">
+        <ArrayRangeDomain name="range">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+            <Property function="ArraySelection" name="SelectInputScalars" />
+          </RequiredProperties>
+        </ArrayRangeDomain>
+        <Documentation>If clipping with scalars, this property sets the scalar
+        value about which to clip the dataset based on the scalar array chosen.
+        (See SelectInputScalars.) If clipping with a clip function, this
+        property specifies an offset from the clip function to use in the
+        clipping operation. Neither functionality is currently available in
+        ParaView's user interface.</Documentation>
+        <Hints>
+          <PropertyWidgetDecorator mode="visibility" property="ClipFunction" type="GenericDecorator" value="Scalar" />
+        </Hints>
+      </DoubleVectorProperty>
+      <IntVectorProperty command="SetInsideOut" default_values="0" name="InsideOut" number_of_elements="1">
+        <BooleanDomain name="bool" />
+        <Documentation>If this property is set to 0, the clip filter will
+        return that portion of the dataset that lies within the clip function.
+        If set to 1, the portions of the dataset that lie outside the clip
+        function will be returned instead.</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetUseValueAsOffset" default_values="0" name="UseValueAsOffset" number_of_elements="1" panel_visibility="never">
+        <BooleanDomain name="bool" />
+        <Documentation>If UseValueAsOffset is true, Value is used as an offset
+        parameter to the implicit function. Otherwise, Value is used only when
+        clipping using a scalar array.</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="PreserveInputCells" default_values="0" label="Crinkle clip" name="PreserveInputCells" number_of_elements="1">
+        <BooleanDomain name="bool" />
+        <Documentation>This parameter controls whether to extract entire cells
+        in the given region or clip those cells so all of the output one stay
+        only inside that region.</Documentation>
+        <Hints>
+          <PropertyWidgetDecorator inverse="1" mode="visibility" property="ClipFunction" type="GenericDecorator" value="Scalar" />
+        </Hints>
+      </IntVectorProperty>
+      <Hints>
+        <Visibility replace_input="2" />
+      </Hints>
+      
+    </SourceProxy>
+    
+    <SourceProxy class="vtkPVContourFilter" name="Contour">
+      <Documentation long_help="Generate isolines or isosurfaces using point scalars." short_help="Generate isolines or isosurfaces.">The Contour
+                     filter computes isolines or isosurfaces using a selected
+                     point-centered scalar array. The Contour filter operates
+                     on any type of data set, but the input is required to have
+                     at least one point-centered scalar (single-component)
+                     array. The output of this filter is
+                     polygonal.</Documentation>
+      <InputProperty command="SetInputConnection" name="Input">
+        <ProxyGroupDomain name="groups">
+          <Group name="sources" />
+          <Group name="filters" />
+        </ProxyGroupDomain>
+        <DataTypeDomain name="input_type">
+          <DataType value="vtkDataSet" />
+        </DataTypeDomain>
+        <InputArrayDomain attribute_type="point" name="input_array" number_of_components="1" />
+        <Documentation>This property specifies the input dataset to be used by
+        the contour filter.</Documentation>
+      </InputProperty>
+      <StringVectorProperty animateable="0" command="SetInputArrayToProcess" element_types="0 0 0 0 2" label="Contour By" name="SelectInputScalars" number_of_elements="5">
+        <ArrayListDomain attribute_type="Scalars" name="array_list">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+          </RequiredProperties>
+        </ArrayListDomain>
+        <FieldDataDomain name="field_list">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+          </RequiredProperties>
+        </FieldDataDomain>
+        <Documentation>This property specifies the name of the scalar array
+        from which the contour filter will compute isolines and/or
+        isosurfaces.</Documentation>
+      </StringVectorProperty>
+      <IntVectorProperty animateable="0" command="SetComputeNormals" default_values="1" name="ComputeNormals" number_of_elements="1">
+        <BooleanDomain name="bool" />
+        <Hints>
+          <PropertyWidgetDecorator type="NonPolyDataInputDecorator" />
+        </Hints>
+        <Documentation>If this property is set to 1, a scalar array containing
+        a normal value at each point in the isosurface or isoline will be
+        created by the contour filter; otherwise an array of normals will not
+        be computed. This operation is fairly expensive both in terms of
+        computation time and memory required, so if the output dataset produced
+        by the contour filter will be processed by filters that modify the
+        dataset's topology or geometry, it may be wise to set the value of this
+        property to 0. Select whether to compute normals.</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty animateable="0" command="SetComputeGradients" default_values="0" name="ComputeGradients" number_of_elements="1">
+        <BooleanDomain name="bool" />
+        <Hints>
+          <PropertyWidgetDecorator name="Structured" type="InputDataTypeDecorator" />
+        </Hints>
+        <Documentation>If this property is set to 1, a scalar array containing
+        a gradient value at each point in the isosurface or isoline will be
+        created by this filter; otherwise an array of gradients will not be
+        computed. This operation is fairly expensive both in terms of
+        computation time and memory required, so if the output dataset produced
+        by the contour filter will be processed by filters that modify the
+        dataset's topology or geometry, it may be wise to set the value of this
+        property to 0. Not that if ComputeNormals is set to 1, then gradients
+        will have to be calculated, but they will only be stored in the output
+        dataset if ComputeGradients is also set to 1.</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty animateable="0" command="SetComputeScalars" default_values="0" name="ComputeScalars" number_of_elements="1">
+        <BooleanDomain name="bool" />
+        <Documentation>If this property is set to 1, an array of scalars
+        (containing the contour value) will be added to the output dataset. If
+        set to 0, the output will not contain this array.</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty animateable="0" command="SetGenerateTriangles" default_values="1" name="GenerateTriangles" number_of_elements="1">
+        <BooleanDomain name="bool" />
+        <Documentation>This parameter controls whether to produce triangles in the output.
+        Warning: Many filters do not properly handle non-trianglular polygons.
+        </Documentation>
+      </IntVectorProperty>
+      <DoubleVectorProperty animateable="1" command="SetValue" label="Isosurfaces" name="ContourValues" number_of_elements="0" number_of_elements_per_command="1" repeat_command="1" set_number_command="SetNumberOfContours" use_index="1">
+        <ArrayRangeDomain name="scalar_range">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+            <Property function="ArraySelection" name="SelectInputScalars" />
+          </RequiredProperties>
+        </ArrayRangeDomain>
+        <Documentation>This property specifies the values at which to compute
+        isosurfaces/isolines and also the number of such
+        values.</Documentation>
+      </DoubleVectorProperty>
+      <Hints>
+        <Visibility replace_input="2" />
+      </Hints>
+      
+      <ProxyProperty command="SetLocator" label="Point Merge Method" name="Locator" panel_visibility="advanced">
+        <ProxyGroupDomain name="groups">
+          <Group name="incremental_point_locators" />
+        </ProxyGroupDomain>
+        <ProxyListDomain name="proxy_list">
+          <Proxy group="incremental_point_locators" name="MergePoints" />
+          <Proxy group="incremental_point_locators" name="IncrementalOctreeMergePoints" />
+          <Proxy group="incremental_point_locators" name="NonMergingPointLocator" />
+        </ProxyListDomain>
+        <Documentation>This property specifies an incremental point locator for
+        merging duplicate / coincident points.</Documentation>
+      </ProxyProperty>
+      
+
+      <PropertyGroup label="Isosurfaces">
+        <Property name="ContourValues" />
+      </PropertyGroup>
+      <PropertyGroup label="Point Locator">
+        <Property name="Locator" />
+      </PropertyGroup>
+
+      
+    </SourceProxy>
+    
+    <SourceProxy class="vtkPVGlyphFilter" name="Glyph">
+      <Documentation long_help="This filter produces a glyph at each point of in input data set.  The glyphs can be oriented and scaled by point attributes of the input dataset." short_help="Generate a glyph at each point of the input data set.">
+      The Glyph filter generates a glyph (i.e., an arrow, cone, cube, cylinder,
+      line, sphere, or 2D glyph) at each point in the input dataset. The glyphs
+      can be oriented and scaled by the input point-centered scalars and
+      vectors. The Glyph filter operates on any type of data set. Its output is
+      polygonal
+
+      To use this filter, you first select the arrays to use for as the "Scalars" and
+      "Vectors", if any.
+      To orient the glyphs using the selected "Vectors", use "Orient" property.
+      To scale the glyphs using the selected "Scalars" or "Vectors", use the "Scale Mode"
+      property.
+
+      The "Glyph Mode" property controls which points in the input dataset are selected
+      for glyphing (since in most cases, glyping all points in the input dataset can be
+      both performance impeding as well as visually cluttred.
+      </Documentation>
+      <InputProperty command="SetInputConnection" name="Input">
+        <ProxyGroupDomain name="groups">
+          <Group name="sources" />
+          <Group name="filters" />
+        </ProxyGroupDomain>
+        <DataTypeDomain name="input_type">
+          <DataType value="vtkDataSet" />
+        </DataTypeDomain>
+        <InputArrayDomain attribute_type="point" name="input_array1" number_of_components="1" optional="1" />
+        <InputArrayDomain attribute_type="point" name="input_array2" number_of_components="3" optional="1" />
+        <Documentation>This property specifies the input to the Glyph filter.
+        This is the dataset from which the points are selecetd to be glyphed.
+        </Documentation>
+      </InputProperty>
+      <InputProperty command="SetSourceConnection" label="Glyph Type" name="Source">
+        <ProxyGroupDomain name="groups">
+          <Group name="sources" />
+          <Group name="glyph_sources" />
+        </ProxyGroupDomain>
+        <DataTypeDomain name="input_type">
+          <DataType value="vtkPolyData" />
+        </DataTypeDomain>
+        <ProxyListDomain name="proxy_list">
+          <Proxy group="sources" name="ArrowSource" />
+          <Proxy group="sources" name="ConeSource" />
+          <Proxy group="sources" name="CubeSource" />
+          <Proxy group="sources" name="CylinderSource" />
+          <Proxy group="sources" name="LineSource" />
+          <Proxy group="sources" name="SphereSource" />
+          <Proxy group="sources" name="GlyphSource2D" />
+        </ProxyListDomain>
+        <Hints>
+          <ProxyPropertyWidget selected_proxy_panel_visibility="advanced" />
+          
+        </Hints>
+        <Documentation>This property determines which type of glyph will be
+        placed at the points in the input dataset.</Documentation>
+      </InputProperty>
+      <StringVectorProperty command="SetInputArrayToProcess" element_types="0 0 0 0 2" name="Scalars" number_of_elements="5">
+        <ArrayListDomain attribute_type="Scalars" input_domain_name="input_array1" name="array_list">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+          </RequiredProperties>
+        </ArrayListDomain>
+        <Documentation>Select the input array to be treated as the active "Scalars".
+          You can scale the glyphs using the selected scalars by setting the
+          "Scale Mode" property to "scalar"
+        </Documentation>
+      </StringVectorProperty>
+      <StringVectorProperty command="SetInputArrayToProcess" default_values="1" element_types="0 0 0 0 2" name="Vectors" number_of_elements="5">
+        
+        <ArrayListDomain attribute_type="Vectors" input_domain_name="input_array2" name="array_list">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+          </RequiredProperties>
+        </ArrayListDomain>
+        <Documentation>Select the input array to be treated as the active "Vectors".
+          You can scale the glyphs using the selected vectors by setting the "Scale Mode"
+          property to "vector" or "vector_components". You can orient the glyphs using the
+          selected vectors by checking the "Orient" property.
+        </Documentation>
+      </StringVectorProperty>
+      <IntVectorProperty command="SetOrient" default_values="1" name="Orient" number_of_elements="1">
+        <BooleanDomain name="bool" />
+        <Documentation>If this property is set to 1, the glyphs will be
+          oriented based on the vectors selected using the "Vectors" property.
+        </Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetScaleMode" default_values="3" name="ScaleMode" number_of_elements="1">
+        <EnumerationDomain name="enum">
+          <Entry text="scalar" value="0" />
+          <Entry text="vector" value="1" />
+          <Entry text="vector_components" value="2" />
+          <Entry text="off" value="3" />
+        </EnumerationDomain>
+        <Documentation>Select how to scale the glyphs. Set to "off" to disable
+          scaling entirely. Set to "scalar" to scale the glyphs using the
+          array selected using the "Scalars" property. Set to "vector" to scale the
+          glyphs using the magnitude of the array selected using the "Vectors" property.
+          Set to "vector_components" to scale using the "Vectors", scaling each component
+          individually.
+        </Documentation>
+      </IntVectorProperty>
+      <DoubleVectorProperty command="SetScaleFactor" default_values="1.0" name="ScaleFactor" number_of_elements="1" panel_widget="glyph_scale_factor">
+        <BoundsDomain mode="scaled_extent" name="bounds" scale_factor="0.1">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+          </RequiredProperties>
+        </BoundsDomain>
+        <ArrayRangeDomain name="scalar_range">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+            <Property function="ArraySelection" name="Scalars" />
+          </RequiredProperties>
+        </ArrayRangeDomain>
+        <ArrayRangeDomain name="vector_range">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+            <Property function="ArraySelection" name="Vectors" />
+          </RequiredProperties>
+        </ArrayRangeDomain>
+        <Documentation>Specify the constant multiplier to use to scale the glyphs.
+        </Documentation>
+      </DoubleVectorProperty>
+      <IntVectorProperty command="SetGlyphMode" default_values="2" name="GlyphMode" number_of_elements="1" panel_visibility="default">
+        <EnumerationDomain name="enum">
+          <Entry text="All Points" value="0" />
+          <Entry text="Every Nth Point" value="1" />
+          <Entry text="Uniform Spatial Distribution" value="2" />
+        </EnumerationDomain>
+        <Documentation>
+          This property indicates the mode that will be used to generate
+          glyphs from the dataset.
+        </Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetMaximumNumberOfSamplePoints" default_values="5000" name="MaximumNumberOfSamplePoints" number_of_elements="1">
+        <IntRangeDomain min="1" name="range" />
+        <Documentation>
+          This property specifies the maximum number of sample points to use
+          when sampling the space when Uniform Spatial Distribution is used.
+        </Documentation>
+        <Hints>
+          <PropertyWidgetDecorator mode="visibility" property="GlyphMode" type="GenericDecorator" value="2" />
+          
+        </Hints>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetSeed" default_values="10339" name="Seed" number_of_elements="1">
+        <IntRangeDomain min="1" name="range" />
+        <Documentation>
+          This property specifies the seed that will be used for generating
+          a uniform distribution of glyph points when a Uniform Spatial
+          Distribution is used.
+        </Documentation>
+        <Hints>
+          <PropertyWidgetDecorator mode="visibility" property="GlyphMode" type="GenericDecorator" value="2" />
+          
+        </Hints>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetStride" default_values="1" name="Stride" number_of_elements="1">
+        <IntRangeDomain min="1" name="range" />
+        <Documentation>
+          This property specifies the stride that will be used when glyphing
+          by Every Nth Point.
+        </Documentation>
+        <Hints>
+          <PropertyWidgetDecorator mode="visibility" property="GlyphMode" type="GenericDecorator" value="1" />
+          
+        </Hints>
+     </IntVectorProperty>
+
+     <ProxyProperty command="SetSourceTransform" name="GlyphTransform" panel_visibility="advanced">
+        <ProxyListDomain name="proxy_list">
+          <Proxy group="extended_sources" name="Transform2" />
+        </ProxyListDomain>
+        <Documentation>The values in this property allow you to specify the
+        transform (translation, rotation, and scaling) to apply to the glyph
+        source.</Documentation>
+      </ProxyProperty>
+
+      <PropertyGroup label="Glyph Source">
+        <Property name="Source" />
+      </PropertyGroup>
+      <PropertyGroup label="Active Attributes">
+        <Property name="Scalars" />
+        <Property name="Vectors" />
+      </PropertyGroup>
+      <PropertyGroup label="Glyph Transform">
+        <Property name="GlyphTransform" />
+      </PropertyGroup>
+      <PropertyGroup label="Orientation">
+        <Property name="Orient" />
+      </PropertyGroup>
+      <PropertyGroup label="Scaling">
+        <Property name="ScaleMode" />
+        <Property name="ScaleFactor" />
+      </PropertyGroup>
+      <PropertyGroup label="Masking">
+        <Property name="GlyphMode" />
+        <Property name="MaximumNumberOfSamplePoints" />
+        <Property name="Seed" />
+        <Property name="Stride" />
+      </PropertyGroup>
+
+      <Hints>
+        
+        <Visibility replace_input="0" />
+      </Hints>
+      
+    </SourceProxy>
+
+    
+    <SourceProxy class="vtkPassArrays" label="Pass Arrays" name="PassArrays">
+      <Documentation long_help="Pass specified point and cell data arrays." short_help="Pass specified point and cell data arrays.">
+                     The Pass Arrays filter makes a shallow copy of the output
+                     data object from the input data object except for passing
+                     only the arrays specified to the output from the
+                     input.</Documentation>
+      <InputProperty command="SetInputConnection" name="Input">
+        <ProxyGroupDomain name="groups">
+          <Group name="sources" />
+          <Group name="filters" />
+        </ProxyGroupDomain>
+        <DataTypeDomain name="input_type">
+          <DataType value="vtkDataObject" />
+        </DataTypeDomain>
+        <InputArrayDomain attribute_type="cell" name="input_array_cell" optional="1" />
+        <InputArrayDomain attribute_type="point" name="input_array_point" optional="1" />
+        <InputArrayDomain attribute_type="field" name="input_field_array" optional="1" />
+      </InputProperty>
+      <StringVectorProperty clean_command="ClearPointDataArrays" command="AddPointDataArray" name="PointDataArrays" number_of_elements_per_command="1" repeat_command="1">
+        <Documentation>Add a point array by name to be passed.</Documentation>
+        <ArrayListDomain input_domain_name="input_array_point" name="array_list">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+          </RequiredProperties>
+        </ArrayListDomain>
+      </StringVectorProperty>
+      <StringVectorProperty clean_command="ClearCellDataArrays" command="AddCellDataArray" name="CellDataArrays" number_of_elements_per_command="1" repeat_command="1">
+        <Documentation>Add a cell array by name to be passed.</Documentation>
+        <ArrayListDomain input_domain_name="input_array_cell" name="array_list">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+          </RequiredProperties>
+        </ArrayListDomain>
+      </StringVectorProperty>
+      <StringVectorProperty clean_command="ClearFieldDataArrays" command="AddFieldDataArray" name="FieldDataArrays" number_of_elements_per_command="1" repeat_command="1">
+        <Documentation>Add a field array by name to be passed.</Documentation>
+        <ArrayListDomain input_domain_name="input_field_array" name="array_list">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+          </RequiredProperties>
+        </ArrayListDomain>
+      </StringVectorProperty>
+      <IntVectorProperty command="SetUseFieldTypes" default_values="1" name="UseFieldTypes" number_of_elements="1" panel_visibility="never">
+        <BooleanDomain name="bool" />
+        <Documentation>This hidden property must always be set to 1 for this
+        proxy to work.</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="AddFieldType" default_values="0 1 2" name="SelectedFieldTypes" number_of_elements="3" number_of_elements_per_command="1" panel_visibility="never" repeat_command="1">
+        <BooleanDomain name="bool" />
+        <Documentation>This hidden property must always be set to 0 for this
+        proxy to work.</Documentation>
+      </IntVectorProperty>
+      
+    </SourceProxy>
+
+    </ProxyGroup></ServerManagerConfiguration>

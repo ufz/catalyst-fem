@@ -1,0 +1,11 @@
+<ServerManagerConfiguration><ProxyGroup name="sources"><SourceProxy class="vtkTrivialProducer" name="TrivialProducer">
+    </SourceProxy>
+    
+    <SourceProxy class="vtkPVTrivialProducer" name="PVTrivialProducer">
+      <IntVectorProperty command="SetWholeExtent" default_values="0 -1 0 -1 0 -1" name="WholeExtent" number_of_elements="6" panel_visibility="never">
+        <Documentation>The values of this property specify the whole extent of
+        the topologically regular grid.</Documentation>
+      </IntVectorProperty>
+    </SourceProxy>
+    
+    </ProxyGroup></ServerManagerConfiguration>

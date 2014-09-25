@@ -1,0 +1,161 @@
+<ServerManagerConfiguration><ProxyGroup name="incremental_point_locators"><NullProxy name="Scalar" />
+    <Proxy class="vtkMergePoints" label="Uniform Binning" name="MergePoints">
+      <Documentation>A point merger using a search structure of uniform
+      fixed-resolution bins / buckets for zero tolerance point insertion (to
+      avoid exactly duplicate / coincident points).</Documentation>
+      <IntVectorProperty command="SetDivisions" default_values="50 50 50" name="Divisions" number_of_elements="3">
+        <Documentation>Specify the number of divisions in each axis / direction
+        (x, y, z) for creating a search structure of uniform fixed-resolution
+        bins / buckets.</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetNumberOfPointsPerBucket" default_values="8" label="Number of points per bucket" name="NumberOfPointsPerBucket" number_of_elements="1">
+        <Documentation>Specify the average number of points in each bin /
+        bucket that determines the initial and growing sizes (in terms of
+        number of points) of each bin / bucket.</Documentation>
+      </IntVectorProperty>
+    </Proxy>
+    <Proxy class="vtkNonMergingPointLocator" label="Don't Merge Points" name="NonMergingPointLocator">
+      <Documentation>Perform direct / check-free point insertion (any point is
+      inserted to a vtkPoints object) and therefore there can be duplicate
+      points.</Documentation>
+      <IntVectorProperty command="SetDivisions" default_values="50 50 50" name="Divisions" number_of_elements="3">
+        <Documentation>Specify the number of divisions in each axis / direction
+        (x, y, z) for creating a search structure of uniform fixed-resolution
+        bins / buckets.</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetNumberOfPointsPerBucket" default_values="8" label="Number of points per bucket" name="NumberOfPointsPerBucket" number_of_elements="1">
+        <Documentation>Specify the average number of points in each bin /
+        bucket that determines the initial and growing sizes (in terms of
+        number of points) of each bin / bucket.</Documentation>
+      </IntVectorProperty>
+    </Proxy>
+    <Proxy class="vtkIncrementalOctreePointLocator" label="Octree Binning" name="IncrementalOctreeMergePoints">
+      <Documentation>A point merger exploiting a fast search structure of
+      data-aware multi-resolution octree nodes for zero-tolerance point
+      insertion (to avoid exactly duplicate / coincident
+      points).</Documentation>
+      <IntVectorProperty command="SetMaxPointsPerLeaf" default_values="128" label="Max number of points per leaf" name="MaxPointsPerLeaf" number_of_elements="1">
+        <IntRangeDomain max="256" min="16" name="range" />
+        <Documentation>Specify the maximum number of points that a leaf node
+        may maintain. This value is a trade-off between the cost of dynamic
+        octree construction (top-down recursive node sub-division into eight
+        children as points are incrementally inserted to the octree) and the
+        speed of point location (particularly within a container leaf
+        node).</Documentation>
+      </IntVectorProperty>
+      <DoubleVectorProperty command="SetTolerance" default_values="0.0" name="Tolerance" number_of_elements="1">
+        <Documentation>Always specify a zero tolerance for point insertion ---
+        merging points.</Documentation>
+      </DoubleVectorProperty>
+      <Hints>
+        <Property name="Tolerance" show="0" />
+      </Hints>
+    </Proxy>
+  </ProxyGroup><ProxyGroup name="implicit_functions"><NullProxy name="Scalar" />
+    <Proxy class="vtkPVPlane" name="Plane">
+      <InputProperty is_internal="1" name="Input" />
+      <DoubleVectorProperty command="SetOrigin" default_values="0.0 0.0 0.0" name="Origin" number_of_elements="3">
+        <BoundsDomain default_mode="mid" mode="normal" name="range">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+          </RequiredProperties>
+        </BoundsDomain>
+      </DoubleVectorProperty>
+      <DoubleVectorProperty command="SetNormal" default_values="1.0 0.0 0.0" name="Normal" number_of_elements="3">
+        <DoubleRangeDomain name="range" />
+      </DoubleVectorProperty>
+      <DoubleVectorProperty animateable="1" command="SetOffset" default_values="0.0" name="Offset" number_of_elements="1">
+      </DoubleVectorProperty>
+      <Hints>
+        
+        <PropertyGroup type="Plane">
+          <Property function="Origin" name="Origin" />
+          <Property function="Normal" name="Normal" />
+        </PropertyGroup>
+        <ProxyList>
+          
+          <Link name="Input" with_property="Input" />
+        </ProxyList>
+      </Hints>
+    </Proxy>
+    <Proxy class="vtkPVBox" name="Box">
+      <DoubleVectorProperty command="SetBounds" default_values="0 1 0 1 0 1" name="Bounds" number_of_elements="6" />
+      <DoubleVectorProperty animateable="1" command="SetPosition" default_values="0.0 0.0 0.0" name="Position" number_of_elements="3">
+        <DoubleRangeDomain name="range" />
+      </DoubleVectorProperty>
+      <DoubleVectorProperty animateable="1" command="SetRotation" default_values="0.0 0.0 0.0" name="Rotation" number_of_elements="3">
+        <DoubleRangeDomain name="range" />
+      </DoubleVectorProperty>
+      <DoubleVectorProperty animateable="1" command="SetScale" default_values="1.0 1.0 1.0" name="Scale" number_of_elements="3">
+        <DoubleRangeDomain name="range" />
+      </DoubleVectorProperty>
+      <Hints>
+        
+        <PropertyGroup type="Box">
+          <Property function="Position" name="Position" />
+          <Property function="Rotation" name="Rotation" />
+          <Property function="Scale" name="Scale" />
+          <Property function="PlaceWidget" name="Bounds" />
+        </PropertyGroup>
+      </Hints>
+      
+    </Proxy>
+    <Proxy class="vtkSphere" name="Sphere">
+      <DoubleVectorProperty command="SetCenter" default_values="none" name="Center" number_of_elements="3">
+        <DoubleRangeDomain name="range" />
+      </DoubleVectorProperty>
+      <DoubleVectorProperty command="SetRadius" default_values="none" name="Radius" number_of_elements="1">
+        <DoubleRangeDomain min="0" name="range" />
+      </DoubleVectorProperty>
+      <Hints>
+        
+        <PropertyGroup type="Sphere">
+          <Property function="Center" name="Center" />
+          <Property function="Radius" name="Radius" />
+        </PropertyGroup>
+      </Hints>
+    </Proxy>
+  </ProxyGroup><ProxyGroup name="misc"><TimeKeeperProxy class="vtkSMTimeKeeper" name="TimeKeeper" processes="client">
+      <Documentation>TimeKeeper is used to keep the pipeline time for the
+      application. All views added to the timekeeper show the same time as that
+      on the time keeper.</Documentation>
+      <DoubleVectorProperty command="SetTime" default_values="0" name="Time" number_of_elements="1" precision="16" state_ignored="1">
+        
+        <DoubleRangeDomain name="range" />
+      </DoubleVectorProperty>
+      <DoubleVectorProperty information_only="1" name="TimestepValues">
+        <Documentation>The timesteps currently available. This property does
+        not have any information helper since vtkSMTimeKeeperProxy keeps this
+        updated without any need to call
+        UpdatePropertyInformation().</Documentation>
+      </DoubleVectorProperty>
+      <DoubleVectorProperty default_values="0.0 0.0" information_only="1" name="TimeRange" number_of_elements="2" precision="16" state_ignored="1">
+        
+        <Documentation>This is the time range. It's possible that there are no
+        TimestepValues but there is a valid TimeRange since some sources may
+        provide continuous time.</Documentation>
+      </DoubleVectorProperty>
+      <StringVectorProperty default_values="Time" information_only="1" name="TimeLabel" number_of_elements="1" state_ignored="1">
+        
+        <Documentation>This is the string that is used as label to eventually
+        replace "time" by something else such as "frequency" or any user
+        specific label that the user want to set to use a 4th dimension that is
+        not time.</Documentation>
+      </StringVectorProperty>
+      <ProxyProperty argument_type="SMProxy" command="AddView" name="Views" remove_command="RemoveView" repeatable="1">
+        <Documentation>Views with their view time linked with this time
+        keeper.</Documentation>
+      </ProxyProperty>
+      <ProxyProperty argument_type="SMProxy" command="AddTimeSource" name="TimeSources" remove_command="RemoveTimeSource" repeatable="1">
+        <Documentation>List of proxies that provide time. TimestepValues
+        property has a set of timesteps provided by all the sources added to
+        this property alone.</Documentation>
+      </ProxyProperty>
+      <ProxyProperty argument_type="SMProxy" command="AddSuppressedTimeSource" name="SuppressedTimeSources" remove_command="RemoveSuppressedTimeSource" repeatable="1">
+        <Documentation>List of proxies that are to supressed i.e their times
+          to be ignored.
+        </Documentation>
+      </ProxyProperty>
+      
+    </TimeKeeperProxy>
+    </ProxyGroup></ServerManagerConfiguration>
